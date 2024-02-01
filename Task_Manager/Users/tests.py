@@ -3,11 +3,10 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Task
 
 User = get_user_model()
 
-class ToDoTests(TestCase):
+class UsersTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
@@ -15,32 +14,30 @@ class ToDoTests(TestCase):
             email='testuser@example.com',
             password='testpassword'
         )
-        self.client.force_login(self.user)
-        self.task = Task.objects.create(
-            description='Test Task',
-            status=Task.TODO,
-            user=self.user
-        )
+        self.client.force_login(self.user)  # No es necesario JWT para estas pruebas
 
     def get_jwt_token(self):
         refresh = RefreshToken.for_user(self.user)
         return str(refresh.access_token)
-
-    def test_task_list_create_view(self):
-        token = self.get_jwt_token()
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-        response = self.client.post('/api/task_manager/tasks/', {'description': 'New Task'})
+    
+    def test_user_registration_view(self):
+        self.client.logout()
+        response = self.client.post('/api/task_manager/register/', {
+            'username': 'newuser',
+            'email': 'newuser@example.com',
+            'password': 'newpassword'
+        })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn('error', response.data)
         self.assertFalse(response.data['error'])
         self.assertIn('objeto', response.data)
 
-    def test_task_detail_view(self):
+    def test_user_detail_view(self):
         token = self.get_jwt_token()
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-        response = self.client.get(f'/api/task_manager/tasks/{self.task.id}/')
+        response = self.client.get('/api/task_manager/user/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('error', response.data)
         self.assertFalse(response.data['error'])
         self.assertIn('objeto', response.data)
-        self.assertEqual(response.data['objeto']['description'], 'Test Task')
+        self.assertEqual(response.data['objeto']['username'], 'testuser')
