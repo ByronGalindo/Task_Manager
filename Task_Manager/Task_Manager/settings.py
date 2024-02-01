@@ -70,6 +70,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'AuthJWT.middlewares.CustomResponseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
