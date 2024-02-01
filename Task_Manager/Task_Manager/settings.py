@@ -37,6 +37,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'ToDo',                                     # Manejo de las Tareas
     'Users',                                    # Manejo de los usuarios
     'drf_yasg',                                 # Gestor documentacion API
+    'corsheaders',                              # Manejo de conexiones
 ]
 
 # Configuración para utilizar JWT
