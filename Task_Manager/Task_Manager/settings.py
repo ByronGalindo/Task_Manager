@@ -24,7 +24,7 @@ if config_path.exists():
     environ.Env.read_env(config_path)
 else:
     print("Error: El archivo .env no se encontró en la ruta especificada.")
-    sys.exit(1)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -49,7 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',                           # Inclusion de REST
     'rest_framework_simplejwt',                 # Inclusion de JWT
-    'autenticacion',                            # Gestion de JWT
+    'AuthJWT',                                  # Gestion de JWT
+    'ToDo',                                     # Manejo de las Tareas
+    'Users',                                    # Manejo de los usuarios
+    'drf_yasg',                                 # Gestor documentacion API
 ]
 
 # Configuración para utilizar JWT
@@ -63,9 +66,6 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=72),
 }
-
-CUSTOM_RESPONSE_MIDDLEWARE_EXCLUDE_APPS = ['general']           # Excluimos la app general para gestionar la documentacion
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -131,6 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'Users.Users'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
