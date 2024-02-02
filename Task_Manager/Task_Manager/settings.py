@@ -39,6 +39,18 @@ ALLOWED_HOSTS = []
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",  # URL de tu aplicación Vue.js
+    'http://192.168.100.188:8080'
+    
+    # Otras URL permitidas si es necesario
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8080',
+    'http://192.168.100.188:8080'
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -70,6 +82,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'AuthJWT.middlewares.CustomResponseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
